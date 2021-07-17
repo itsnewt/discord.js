@@ -18,9 +18,9 @@ class RESTManager {
     this.globalReset = null;
     this.globalDelay = null;
     if (client.options.restSweepInterval > 0) {
-      client.setInterval(() => {
+      this.sweepInterval = setInterval(() => {
         this.handlers.sweep(handler => handler._inactive);
-      }, client.options.restSweepInterval * 1000);
+      }, client.options.restSweepInterval * 1000).unref();
     }
   }
 
@@ -29,7 +29,7 @@ class RESTManager {
   }
 
   getAuth() {
-    const token = this.client.token || this.client.accessToken;
+    const token = this.client.token ?? this.client.accessToken;
     if (token) return `${this.tokenPrefix} ${token}`;
     throw new Error('TOKEN_MISSING');
   }
